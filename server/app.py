@@ -19,7 +19,7 @@ db.init_app(app)
 # GET request to show all the messages in '/messages' route
 @app.route('/messages', methods=["GET", "POST"])
 def messages():
-    messages = Message.query.order_by(Message.created_at.asc())
+    messages = Message.query.order_by(Message.created_at.asc()).all()
 
     if request.method == "GET":
         messages_dict = [message.to_dict() for message in messages]
@@ -35,6 +35,9 @@ def messages():
         db.session.commit()
         response = make_response(message_body.to_dict(), 201)
         return response
+    
+    def __repr__(self):
+        return f"""<Message {self.id}: {self.body}, username:{self.username}"""
     
 
 @app.route('/messages/<int:id>', methods=["GET", "DELETE", "PATCH"])
