@@ -23,6 +23,8 @@ def messages():
 
     if request.method == "GET":
         messages_dict = [message.to_dict() for message in messages]
+        # messages_dict = jsonify(messages_dict)    # worked the same
+        print(messages_dict)
         response = make_response(messages_dict, 200)
         return response
     
@@ -34,6 +36,8 @@ def messages():
         db.session.add(message_body)
         db.session.commit()
         response = make_response(message_body.to_dict(), 201)
+        # response = make_response(jsonify(message_body.to_dict()), 201)   # worked
+        # response = make_response(jsonify(message_body), 201)             # not worked -> raise TypeError(f"Object of type {type(o).__name__} is not JSON serializable"), TypeError: Object of type Message is not JSON serializable
         return response
     
     def __repr__(self):
